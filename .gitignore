@@ -1,0 +1,30 @@
+bin/
+gradle/
+build/
+.settings/
+target/
+!gradle/wrapper/gradle-wrapper.jar
+.project
+.metadata
+*.log.*
+*.log
+.settings
+*overlays
+out/
+.gradle
+*.classpath
+*META-INF
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.springBeans
+
+### IntelliJ IDEA ###
+.idea/
+.idea
+*.iws
+*.iml
+*.ipr
+/src/main/resources/sso-utils-1.0.1.jar
