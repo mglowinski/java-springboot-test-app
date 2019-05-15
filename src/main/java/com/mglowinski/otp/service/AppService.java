@@ -29,6 +29,25 @@ public class AppService {
         return results;
     }
 
+    public int[] getFibonacciSeriesIteratively(Integer n) {
+        if (n == null) {
+            n = 10;
+        }
+
+        int[] results = new int[n];
+        int x = 0;
+        int y = 1;
+
+        for (int i = 0; i < n; i++) {
+            int z = x + y;
+            results[i] = z;
+            x = y;
+            y = z;
+        }
+
+        return results;
+    }
+
     private int fib(int n) {
         if (n > 1) {
             return fib(n - 1) + fib(n - 2);
