@@ -1,4 +1,4 @@
-package com.mglowinski.otp.service;
+package com.mglowinski.app.service;
 
 import org.springframework.stereotype.Service;
 
@@ -29,23 +29,25 @@ public class AppService {
         return results;
     }
 
-    public int[] getFibonacciSeriesIteratively(Integer n) {
+    public int getFibonacciValueIteratively(Integer n) {
         if (n == null) {
             n = 10;
         }
 
-        int[] results = new int[n];
-        int x = 0;
-        int y = 1;
-
-        for (int i = 0; i < n; i++) {
-            int z = x + y;
-            results[i] = z;
-            x = y;
-            y = z;
+        if (n <= 1) {
+            return n;
         }
 
-        return results;
+        int fib = 1;
+        int prevFib = 1;
+
+        for (int i = 2; i < n; i++) {
+            int temp = fib;
+            fib += prevFib;
+            prevFib = temp;
+        }
+
+        return fib;
     }
 
     private int fib(int n) {

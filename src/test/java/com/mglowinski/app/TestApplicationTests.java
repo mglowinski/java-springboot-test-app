@@ -1,4 +1,4 @@
-package com.mglowinski.otp;
+package com.mglowinski.app;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

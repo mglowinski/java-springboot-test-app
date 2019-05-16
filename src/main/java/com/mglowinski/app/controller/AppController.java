@@ -1,6 +1,6 @@
-package com.mglowinski.otp.controller;
+package com.mglowinski.app.controller;
 
-import com.mglowinski.otp.service.AppService;
+import com.mglowinski.app.service.AppService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +46,11 @@ public class AppController {
         return ResponseEntity.ok(sumOfSquares);
     }
 
-    @RequestMapping(value = "/fib-series-iteratively", produces = "application/json")
-    public ResponseEntity<Object> getFibonacciSeriesIteratively(@RequestParam(value = "n", required = false) Integer n) {
-        int[] sumOfSquares = appService.getFibonacciSeriesIteratively(n);
-        return ResponseEntity.ok(sumOfSquares);
+    @RequestMapping(value = "/fib-value-iteratively", produces = "application/json")
+    public ResponseEntity<Object> getFibonacciValueIteratively(@RequestParam(value = "n", required = false) Integer n) {
+        JSONObject object = new JSONObject();
+        int fibValue = appService.getFibonacciValueIteratively(n);
+        object.put("fibValue", fibValue);
+        return ResponseEntity.ok(object.toString());
     }
 }
