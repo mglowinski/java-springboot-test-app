@@ -1,9 +1,23 @@
 package com.mglowinski.app.service;
 
+import com.mglowinski.app.model.Address;
+import com.mglowinski.app.model.User;
+import com.mglowinski.app.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AppService {
+
+    private final UserRepository userRepository;
+
+    @Autowired
+    public AppService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public int getSumOfSquares(Integer n) {
         if (n == null) {
@@ -48,6 +62,23 @@ public class AppService {
         }
 
         return fib;
+    }
+
+    public List<User> getUsers() {
+        return userRepository.findAll();
+    }
+
+    public List<User> getUsersByPostCode(String postCode) {
+        return userRepository.findAllByAddress_PostCode(postCode);
+    }
+
+    public List<User> getUsersByCountry(String countryName) {
+        return userRepository.findAllByCountriesName(countryName);
+    }
+
+    public List<Address> getUsersAddresses() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(User::getAddress).collect(Collectors.toList());
     }
 
     private int fib(int n) {

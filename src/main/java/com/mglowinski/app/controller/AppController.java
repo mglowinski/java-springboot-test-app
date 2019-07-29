@@ -1,13 +1,18 @@
 package com.mglowinski.app.controller;
 
+import com.mglowinski.app.model.Address;
+import com.mglowinski.app.model.User;
 import com.mglowinski.app.service.AppService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -20,7 +25,7 @@ public class AppController {
         this.appService = appService;
     }
 
-    @RequestMapping(value = "/hello-world", produces = "application/json")
+    @GetMapping(value = "/hello-world", produces = "application/json")
     public ResponseEntity<Object> hello() throws JSONException {
         JSONObject object = new JSONObject();
         object.put("hello1", "world1");
@@ -32,7 +37,7 @@ public class AppController {
         return ResponseEntity.ok(object.toString());
     }
 
-    @RequestMapping(value = "/sum-of-squares", produces = "application/json")
+    @GetMapping(value = "/sum-of-squares", produces = "application/json")
     public ResponseEntity<Object> getSumOfSquares(@RequestParam(value = "n", required = false) Integer n) {
         JSONObject object = new JSONObject();
         int sumOfSquares = appService.getSumOfSquares(n);
@@ -40,17 +45,39 @@ public class AppController {
         return ResponseEntity.ok(object.toString());
     }
 
-    @RequestMapping(value = "/fib-series-recursively", produces = "application/json")
+    @GetMapping(value = "/fib-series-recursively", produces = "application/json")
     public ResponseEntity<Object> getFibonacciSeriesRecursively(@RequestParam(value = "n", required = false) Integer n) {
         int[] sumOfSquares = appService.getFibonacciSeriesRecursively(n);
         return ResponseEntity.ok(sumOfSquares);
     }
 
-    @RequestMapping(value = "/fib-value-iteratively", produces = "application/json")
+    @GetMapping(value = "/fib-value-iteratively", produces = "application/json")
     public ResponseEntity<Object> getFibonacciValueIteratively(@RequestParam(value = "n", required = false) Integer n) {
         JSONObject object = new JSONObject();
         int fibValue = appService.getFibonacciValueIteratively(n);
         object.put("fibValue", fibValue);
         return ResponseEntity.ok(object.toString());
     }
+
+    @GetMapping(value = "/mongo/users")
+    public ResponseEntity<List<User>> getUsers(@RequestParam(value = "postCode", required = false)
+                                                       String postCode,
+                                               @RequestParam(value = "country", required = false)
+                                                       String country) {
+        List<User> users;
+        if (postCode != null) {
+            users = appService.getUsersByPostCode(postCode);
+        } else if (country != null) {
+            users = appService.getUsersByCountry(country);
+        } else {
+            users = appService.getUsers();
+        }
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping(value = "/mongo/users/addresses")
+    public ResponseEntity<List<Address>> getUsersAddresses() {
+        return ResponseEntity.ok(appService.getUsersAddresses());
+    }
+
 }
