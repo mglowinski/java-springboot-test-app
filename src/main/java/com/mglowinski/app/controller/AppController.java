@@ -65,7 +65,9 @@ public class AppController {
                                                         @RequestParam(value = "country", required = false)
                                                                 String country) {
         List<User> users;
-        if (postCode != null) {
+        if (postCode != null && country != null) {
+            users = appService.getUsersByPostCodeAndCountryFromMongo(postCode, country);
+        } else if (postCode != null) {
             users = appService.getUsersByPostCodeFromMongo(postCode);
         } else if (country != null) {
             users = appService.getUsersByCountryFromMongo(country);
@@ -81,8 +83,26 @@ public class AppController {
     }
 
     @GetMapping(value = "/mysql/users")
-    public ResponseEntity<List<User>> getUsersFromMySql() {
-        return ResponseEntity.ok(appService.getUsersFromMySql());
+    public ResponseEntity<List<User>> getUsersFromMySql(@RequestParam(value = "postCode", required = false)
+                                                                String postCode,
+                                                        @RequestParam(value = "country", required = false)
+                                                                String country) {
+        List<User> users;
+        if (postCode != null && country != null) {
+            users = appService.getUsersByPostCodeAndCountryFromMySql(postCode, country);
+        } else if (postCode != null) {
+            users = appService.getUsersByPostCodeFromMySql(postCode);
+        } else if (country != null) {
+            users = appService.getUsersByCountryFromMySql(country);
+        } else {
+            users = appService.getUsersFromMySql();
+        }
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping(value = "/mysql/users/addresses")
+    public ResponseEntity<List<Address>> getUsersAddressesFromMySql() {
+        return ResponseEntity.ok(appService.getUsersAddressesFromMySql());
     }
 
 }

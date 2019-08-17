@@ -77,7 +77,11 @@ public class AppService {
     }
 
     public List<User> getUsersByCountryFromMongo(String countryName) {
-        return mongoUserRepository.findAllByCountriesName(countryName);
+        return mongoUserRepository.findAllByCountryName(countryName);
+    }
+
+    public List<User> getUsersByPostCodeAndCountryFromMongo(String postCode, String country) {
+        return mongoUserRepository.findAllByAddress_PostCodeAndCountryName(postCode, country);
     }
 
     public List<Address> getUsersAddressesFromMongo() {
@@ -89,6 +93,23 @@ public class AppService {
         return mySqlUserRepository.findAll();
     }
 
+    public List<User> getUsersByPostCodeFromMySql(String postCode) {
+        return mySqlUserRepository.findAllByPostCode(postCode);
+    }
+
+    public List<User> getUsersByCountryFromMySql(String country) {
+        return mySqlUserRepository.findAllByCountry(country);
+    }
+
+    public List<User> getUsersByPostCodeAndCountryFromMySql(String postCode, String country) {
+        return mySqlUserRepository.findAllByPostCodeAndCountry(postCode, country);
+    }
+
+    public List<Address> getUsersAddressesFromMySql() {
+        List<User> users = mySqlUserRepository.findAll();
+        return users.stream().map(User::getAddress).collect(Collectors.toList());
+    }
+
     private int fib(int n) {
         if (n > 1) {
             return fib(n - 1) + fib(n - 2);
@@ -96,4 +117,5 @@ public class AppService {
             return n;
         }
     }
+
 }

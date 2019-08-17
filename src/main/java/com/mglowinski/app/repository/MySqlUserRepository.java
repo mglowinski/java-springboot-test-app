@@ -25,11 +25,39 @@ public class MySqlUserRepository {
     }
 
     public List<User> findAll() {
-        String GET_USERS = "SELECT * FROM " +
+        String QUERY = "SELECT * FROM " +
                 "users " +
                 "INNER JOIN addresses ON users.addressId = addresses.id " +
                 "INNER JOIN countries ON users.countryId = countries.id";
-        return jdbcTemplate.query(GET_USERS, new UserMapper());
+        return jdbcTemplate.query(QUERY, new UserMapper());
+    }
+
+    public List<User> findAllByPostCode(String postCode) {
+        String QUERY = "SELECT * FROM " +
+                "users " +
+                "INNER JOIN addresses ON users.addressId = addresses.id " +
+                "INNER JOIN countries ON users.countryId = countries.id " +
+                "WHERE addresses.postCode = ?";
+        return jdbcTemplate.query(QUERY, new UserMapper(), postCode);
+    }
+
+    public List<User> findAllByCountry(String country) {
+        String QUERY = "SELECT * FROM " +
+                "users " +
+                "INNER JOIN addresses ON users.addressId = addresses.id " +
+                "INNER JOIN countries ON users.countryId = countries.id " +
+                "WHERE countries.name = ?";
+        return jdbcTemplate.query(QUERY, new UserMapper(), country);
+    }
+
+    public List<User> findAllByPostCodeAndCountry(String postCode, String country) {
+        String QUERY = "SELECT * FROM " +
+                "users " +
+                "INNER JOIN addresses ON users.addressId = addresses.id " +
+                "INNER JOIN countries ON users.countryId = countries.id " +
+                "WHERE addresses.postCode = ? " +
+                "AND countries.name = ?";
+        return jdbcTemplate.query(QUERY, new UserMapper(), postCode, country);
     }
 
     class UserMapper implements RowMapper<User> {
