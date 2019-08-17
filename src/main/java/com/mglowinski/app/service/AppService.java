@@ -2,7 +2,8 @@ package com.mglowinski.app.service;
 
 import com.mglowinski.app.model.Address;
 import com.mglowinski.app.model.User;
-import com.mglowinski.app.repository.UserRepository;
+import com.mglowinski.app.repository.MongoUserRepository;
+import com.mglowinski.app.repository.MySqlUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,14 @@ import java.util.stream.Collectors;
 @Service
 public class AppService {
 
-    private final UserRepository userRepository;
+    private final MongoUserRepository mongoUserRepository;
+    private final MySqlUserRepository mySqlUserRepository;
 
     @Autowired
-    public AppService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AppService(MongoUserRepository mongoUserRepository,
+                      MySqlUserRepository mySqlUserRepository) {
+        this.mongoUserRepository = mongoUserRepository;
+        this.mySqlUserRepository = mySqlUserRepository;
     }
 
     public int getSumOfSquares(Integer n) {
@@ -64,21 +68,25 @@ public class AppService {
         return fib;
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<User> getUsersFromMongo() {
+        return mongoUserRepository.findAll();
     }
 
-    public List<User> getUsersByPostCode(String postCode) {
-        return userRepository.findAllByAddress_PostCode(postCode);
+    public List<User> getUsersByPostCodeFromMongo(String postCode) {
+        return mongoUserRepository.findAllByAddress_PostCode(postCode);
     }
 
-    public List<User> getUsersByCountry(String countryName) {
-        return userRepository.findAllByCountriesName(countryName);
+    public List<User> getUsersByCountryFromMongo(String countryName) {
+        return mongoUserRepository.findAllByCountriesName(countryName);
     }
 
-    public List<Address> getUsersAddresses() {
-        List<User> users = userRepository.findAll();
+    public List<Address> getUsersAddressesFromMongo() {
+        List<User> users = mongoUserRepository.findAll();
         return users.stream().map(User::getAddress).collect(Collectors.toList());
+    }
+
+    public List<User> getUsersFromMySql() {
+        return mySqlUserRepository.findAll();
     }
 
     private int fib(int n) {

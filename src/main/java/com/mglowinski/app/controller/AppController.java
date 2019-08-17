@@ -60,24 +60,29 @@ public class AppController {
     }
 
     @GetMapping(value = "/mongo/users")
-    public ResponseEntity<List<User>> getUsers(@RequestParam(value = "postCode", required = false)
-                                                       String postCode,
-                                               @RequestParam(value = "country", required = false)
-                                                       String country) {
+    public ResponseEntity<List<User>> getUsersFromMongo(@RequestParam(value = "postCode", required = false)
+                                                                String postCode,
+                                                        @RequestParam(value = "country", required = false)
+                                                                String country) {
         List<User> users;
         if (postCode != null) {
-            users = appService.getUsersByPostCode(postCode);
+            users = appService.getUsersByPostCodeFromMongo(postCode);
         } else if (country != null) {
-            users = appService.getUsersByCountry(country);
+            users = appService.getUsersByCountryFromMongo(country);
         } else {
-            users = appService.getUsers();
+            users = appService.getUsersFromMongo();
         }
         return ResponseEntity.ok(users);
     }
 
     @GetMapping(value = "/mongo/users/addresses")
-    public ResponseEntity<List<Address>> getUsersAddresses() {
-        return ResponseEntity.ok(appService.getUsersAddresses());
+    public ResponseEntity<List<Address>> getUsersAddressesFromMongo() {
+        return ResponseEntity.ok(appService.getUsersAddressesFromMongo());
+    }
+
+    @GetMapping(value = "/mysql/users")
+    public ResponseEntity<List<User>> getUsersFromMySql() {
+        return ResponseEntity.ok(appService.getUsersFromMySql());
     }
 
 }
