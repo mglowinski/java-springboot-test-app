@@ -1,7 +1,7 @@
 package com.mglowinski.app.controller;
 
-import com.mglowinski.app.model.Address;
 import com.mglowinski.app.model.User;
+import com.mglowinski.app.model.UserAddressDto;
 import com.mglowinski.app.service.AppService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,7 +78,7 @@ public class AppController {
     }
 
     @GetMapping(value = "/mongo/users/addresses")
-    public ResponseEntity<List<Address>> getUsersAddressesFromMongo() {
+    public ResponseEntity<List<UserAddressDto>> getUsersAddressesFromMongo() {
         return ResponseEntity.ok(appService.getUsersAddressesFromMongo());
     }
 
@@ -101,7 +101,7 @@ public class AppController {
     }
 
     @GetMapping(value = "/mysql/users/addresses")
-    public ResponseEntity<List<Address>> getUsersAddressesFromMySql() {
+    public ResponseEntity<List<UserAddressDto>> getUsersAddressesFromMySql() {
         return ResponseEntity.ok(appService.getUsersAddressesFromMySql());
     }
 

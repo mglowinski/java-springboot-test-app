@@ -1,7 +1,7 @@
 package com.mglowinski.app.service;
 
-import com.mglowinski.app.model.Address;
 import com.mglowinski.app.model.User;
+import com.mglowinski.app.model.UserAddressDto;
 import com.mglowinski.app.repository.MongoUserRepository;
 import com.mglowinski.app.repository.MySqlUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,9 +84,11 @@ public class AppService {
         return mongoUserRepository.findAllByAddress_PostCodeAndCountryName(postCode, country);
     }
 
-    public List<Address> getUsersAddressesFromMongo() {
+    public List<UserAddressDto> getUsersAddressesFromMongo() {
         List<User> users = mongoUserRepository.findAll();
-        return users.stream().map(User::getAddress).collect(Collectors.toList());
+        return users.stream()
+                .map(user -> new UserAddressDto(user.getId(), user.getAddress()))
+                .collect(Collectors.toList());
     }
 
     public List<User> getUsersFromMySql() {
@@ -105,9 +107,8 @@ public class AppService {
         return mySqlUserRepository.findAllByPostCodeAndCountry(postCode, country);
     }
 
-    public List<Address> getUsersAddressesFromMySql() {
-        List<User> users = mySqlUserRepository.findAll();
-        return users.stream().map(User::getAddress).collect(Collectors.toList());
+    public List<UserAddressDto> getUsersAddressesFromMySql() {
+        return mySqlUserRepository.findUsersAddresses();
     }
 
     private int fib(int n) {

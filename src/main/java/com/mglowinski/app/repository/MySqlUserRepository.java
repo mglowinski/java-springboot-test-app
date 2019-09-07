@@ -3,6 +3,7 @@ package com.mglowinski.app.repository;
 import com.mglowinski.app.model.Address;
 import com.mglowinski.app.model.Country;
 import com.mglowinski.app.model.User;
+import com.mglowinski.app.model.UserAddressDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -60,6 +61,14 @@ public class MySqlUserRepository {
         return jdbcTemplate.query(QUERY, new UserMapper(), postCode, country);
     }
 
+    public List<UserAddressDto> findUsersAddresses() {
+        String QUERY = "SELECT users.id, users.addressId, addresses.street, addresses.postCode FROM " +
+                "users " +
+                "INNER JOIN addresses ON users.addressId = addresses.id " +
+                "INNER JOIN countries ON users.countryId = countries.id";
+        return jdbcTemplate.query(QUERY, new UsersAddressesMapper());
+    }
+
     class UserMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -71,6 +80,16 @@ public class MySqlUserRepository {
             return new User(rs.getString("id"), rs.getString("username"),
                     rs.getString("firstName"), rs.getString("lastName"),
                     country, address);
+        }
+    }
+
+    class UsersAddressesMapper implements RowMapper<UserAddressDto> {
+        @Override
+        public UserAddressDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Address address = new Address(rs.getString("addressId"), rs.getString("street"),
+                    rs.getString("postCode"));
+
+            return new UserAddressDto(rs.getString("id"), address);
         }
     }
 }
