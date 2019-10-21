@@ -68,6 +68,10 @@ public class AppService {
         return fib;
     }
 
+    public void fillData() {
+        mySqlUserRepository.fillData();
+    }
+
     public List<User> getUsersFromMongo() {
         return mongoUserRepository.findAll();
     }

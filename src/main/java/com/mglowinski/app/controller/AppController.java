@@ -25,6 +25,12 @@ public class AppController {
         this.appService = appService;
     }
 
+    @GetMapping(value = "/fill-data", produces = "application/json")
+    public ResponseEntity<Void> fillData() throws JSONException {
+        appService.fillData();
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(value = "/hello-world", produces = "application/json")
     public ResponseEntity<Object> hello() throws JSONException {
         JSONObject object = new JSONObject();

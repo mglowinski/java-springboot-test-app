@@ -25,6 +25,27 @@ public class MySqlUserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public void fillData() {
+        for (int i = 0; i < 1000; i++) {
+            String QUERY = "INSERT INTO users (username, firstName, lastName, addressId, " +
+                    "countryId) VALUES (?, ?, ?, ?, ?)";
+
+            int addressId;
+            int countryId;
+
+            if (i % 2 == 0) {
+                addressId = 1;
+                countryId = 1;
+            } else {
+                addressId = 2;
+                countryId = 2;
+            }
+            jdbcTemplate.update(
+                    QUERY,
+                    "Sample_User_" + i, "Sample_User_" + i, "Sample_User_" + i, addressId, countryId);
+        }
+    }
+
     public List<User> findAll() {
         String QUERY = "SELECT * FROM " +
                 "users " +
